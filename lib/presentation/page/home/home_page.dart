@@ -24,13 +24,7 @@ class HomePage extends ConsumerWidget {
         itemCount: searchLocalResultList?.length ?? 0,
 
         itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.all(5),
-            child: GestureDetector(
-              onTap: () async {},
-              child: Card(child: Padding(padding: EdgeInsets.all(20), child: LocalSearchResultCard(result: searchLocalResultList![index]))),
-            ),
-          );
+          return Padding(padding: EdgeInsets.all(5), child: LocalSearchResultCard(result: searchLocalResultList![index]));
         },
       ),
     );

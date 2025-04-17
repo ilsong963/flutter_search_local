@@ -8,9 +8,17 @@ class LocalSearchResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [Text(removeTag(result.title)), Text(result.category), Text(result.roadAddress.isEmpty ? result.address : result.roadAddress)],
+    return GestureDetector(
+      onTap: () async {},
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [Text(removeTag(result.title)), Text(result.category), Text(result.roadAddress.isEmpty ? result.address : result.roadAddress)],
+          ),
+        ),
+      ),
     );
   }
 }
