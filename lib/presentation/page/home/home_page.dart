@@ -12,11 +12,19 @@ class HomePage extends ConsumerWidget {
     final searchLocalResultList = ref.watch(locationSearchViewModel);
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-          onSubmitted: (value) async {
-            await ref.read(locationSearchViewModel.notifier).searchLocal(value);
-          },
-          decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+        title: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                onSubmitted: (value) async {
+                  await ref.read(locationSearchViewModel.notifier).searchLocal(value);
+                },
+                decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+
+            IconButton(onPressed: () {}, icon: Icon(Icons.gps_fixed)),
+          ],
         ),
       ),
       body: ListView.builder(
