@@ -6,15 +6,15 @@ class LocationRepository {
     BaseOptions(validateStatus: (status) => true, headers: {"X-Naver-Client-Id": "qqpTyfi_nXUhZSsPI0JT", "X-Naver-Client-Secret": "KqzUVCijJh"}),
   );
 
-  Future<List<Item>> getSearchData(String keyword) async {
+  Future<List<Item>> getSearchLocalData(String keyword) async {
     final response = await _client.get('https://openapi.naver.com/v1/search/local.json?query=$keyword&display=5');
 
     if (response.statusCode == 200) {
-      final data = response.data as Map<String, dynamic>;
-      final items = data['items'] as List<Item>;
-      return items;
+      final items = response.data['items'];
+      return (items as List).map((item) => Item.fromJson(item)).toList();
     }
 
     return [];
   }
 }
+        // Response > result > items >> title
