@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.flutter_search_local"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
