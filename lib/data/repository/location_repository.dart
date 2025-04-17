@@ -23,7 +23,8 @@ class LocationRepository {
     );
 
     if (response.statusCode == 200) {
-      final emd = response.data['response']['result']['featureCollection']['features']['properties']['full_nm'];
+      //읍면동
+      final emd = response.data['response']['result']['featureCollection']['features'][0]['properties']['full_nm'];
       return emd;
     }
 

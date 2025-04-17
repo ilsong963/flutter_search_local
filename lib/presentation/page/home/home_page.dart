@@ -22,7 +22,12 @@ class HomePage extends ConsumerWidget {
               ),
             ),
 
-            IconButton(onPressed: () {}, icon: Icon(Icons.gps_fixed)),
+            IconButton(
+              onPressed: () async {
+                await ref.read(locationSearchViewModel.notifier).searchLocationsByGeo(129.0823133, 35.2202216);
+              },
+              icon: Icon(Icons.gps_fixed),
+            ),
           ],
         ),
       ),
