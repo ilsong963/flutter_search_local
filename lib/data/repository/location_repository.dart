@@ -6,7 +6,7 @@ class LocationRepository {
     BaseOptions(validateStatus: (status) => true, headers: {"X-Naver-Client-Id": "qqpTyfi_nXUhZSsPI0JT", "X-Naver-Client-Secret": "KqzUVCijJh"}),
   );
 
-  Future<List<Item>> getSearchLocalData(String keyword) async {
+  Future<List<Item>> fetchLocationsByKeyword(String keyword) async {
     final response = await _client.get('https://openapi.naver.com/v1/search/local.json?query=$keyword&display=5');
 
     if (response.statusCode == 200) {
@@ -16,5 +16,7 @@ class LocationRepository {
 
     return [];
   }
+
+  Future<List<Item>> fetchLocationsByGeo(double lat, double lng) async {}
 }
         // Response > result > items >> title

@@ -10,8 +10,13 @@ class LocationSearchViewModel extends AutoDisposeNotifier<List<Item>?> {
     return [];
   }
 
-  Future<void> searchLocal(String query) async {
-    final result = await locationRepository.getSearchLocalData(query);
+  Future<void> searchLocationsByKeyword(String keyword) async {
+    final result = await locationRepository.fetchLocationsByKeyword(keyword);
+    state = result;
+  }
+
+  Future<void> searchLocationsByGeo(double lat, double lng) async {
+    final result = await locationRepository.fetchLocationsByGeo(lat, lng);
     state = result;
   }
 }

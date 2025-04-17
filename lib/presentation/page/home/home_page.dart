@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_search_local/data/model/location.dart';
 import 'package:flutter_search_local/presentation/page/home/home_page_view_model.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/local_search_result_card.dart';
 
@@ -17,7 +16,7 @@ class HomePage extends ConsumerWidget {
             Expanded(
               child: TextField(
                 onSubmitted: (value) async {
-                  await ref.read(locationSearchViewModel.notifier).searchLocal(value);
+                  await ref.read(locationSearchViewModel.notifier).searchLocationsByKeyword(value);
                 },
                 decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
               ),
