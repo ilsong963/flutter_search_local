@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_search_local/data/model/location.dart';
 
@@ -19,15 +21,22 @@ class LocationRepository {
 
   Future<String?> fetchKeywordFromGeo(double lat, double lng) async {
     final response = await _client.get(
-      'https://api.vworld.kr/req/data?request=GetFeature&data=LT_C_ADEMD_INFO&key=833FB49C-4B1A-3E24-B36E-058256B640FC&geomfilter=point($lat%20 $lng)&geometry=false&size=100',
+      'https://api.vworld.kr/req/data?request=GetFeature&data=LT_C_ADEMD_INFO&key=833FB49C-4B1A-3E24-B36E-058256B640FC&geomfilter=point($lng%20$lat)&geometry=false&size=100',
     );
 
     if (response.statusCode == 200) {
-      //읍면동
-      final emd = response.data['response']['result']['featureCollection']['features'][0]['properties']['full_nm'];
-      return emd;
+      log(response.data['response']['status']);
+      switch (response.data['response']['status']) {
+        case "OK":
+          //읍면동
+          final emd = response.data['response']['result']['featureCollection']?['features'][0]['properties']['full_nm'];
+          return emd;
+        case "NOT_FOUND":
+          return null;
+        case "ERROR":
+          return null;
+      }
     }
-
     return null;
   }
 
