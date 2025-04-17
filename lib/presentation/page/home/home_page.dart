@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_search_local/core/helper/geolocator_helper.dart';
 import 'package:flutter_search_local/presentation/page/home/home_page_view_model.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/local_search_result_card.dart';
 
@@ -24,7 +25,10 @@ class HomePage extends ConsumerWidget {
 
             IconButton(
               onPressed: () async {
-                await ref.read(locationSearchViewModel.notifier).searchLocationsByGeo(129.0823133, 35.2202216);
+                final position = await GeolocatorHelper.getPositon();
+                if (position != null) {
+                  await ref.read(locationSearchViewModel.notifier).searchLocationsByGeo(position.latitude, position.longitude);
+                }
               },
               icon: Icon(Icons.gps_fixed),
             ),
