@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_search_local/data/model/location.dart';
 import 'package:flutter_search_local/presentation/page/detail/detail_page.dart';
-import 'package:flutter_search_local/util/remove_tag.dart';
+import 'package:flutter_search_local/core/util/remove_tag.dart';
 
 class LocalSearchResultCard extends StatelessWidget {
   final Item result;
