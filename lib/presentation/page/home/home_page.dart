@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_search_local/core/helper/geolocator_helper.dart';
+import 'package:flutter_search_local/presentation/page/detail/detail_page.dart';
 import 'package:flutter_search_local/presentation/page/home/home_page_view_model.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/local_search_result_card.dart';
 
@@ -76,7 +77,15 @@ class HomePage extends ConsumerWidget {
                         itemCount: searchLocalResultList?.length ?? 0,
                         physics: ClampingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Padding(padding: EdgeInsets.all(5), child: LocalSearchResultCard(result: searchLocalResultList![index]));
+                          final result = searchLocalResultList![index];
+                          return GestureDetector(
+                            onTap: () async {
+                              if (result.link.startsWith("https")) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(url: result.link)));
+                              }
+                            },
+                            child: Padding(padding: EdgeInsets.all(5), child: LocalSearchResultCard(result: result)),
+                          );
                         },
                       ),
                     ),
