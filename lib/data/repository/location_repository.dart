@@ -26,7 +26,7 @@ class LocationRepository {
 
   Future<String?> fetchKeywordFromGeo(double lat, double lng) async {
     final response = await _client.get(
-      'https://api.vworld.kr/req/data?request=GetFeature&data=LT_C_ADEMD_INFO&key=$xNaverClientSecret&geomfilter=point($lng%20$lat)&geometry=false&size=100',
+      'https://api.vworld.kr/req/data?request=GetFeature&data=LT_C_ADEMD_INFO&key=$vworldKey&geomfilter=point($lng%20$lat)&geometry=false&size=100',
     );
 
     if (response.statusCode == 200) {
