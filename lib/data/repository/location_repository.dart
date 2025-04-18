@@ -9,13 +9,17 @@ class LocationRepository {
   String xNaverClientId = dotenv.get("X_NAVER_CLIENT_ID");
   String xNaverClientSecret = dotenv.get("X_NAVER_CLIENT_SECRET");
 
-  final Dio _client = Dio(
-    BaseOptions(validateStatus: (status) => true, headers: {"X-Naver-Client-Id": "vworldKey", "X-Naver-Client-Secret": "xNaverClientId"}),
-  );
+  late final Dio _client;
+
+  LocationRepository() {
+    _client = Dio(
+      BaseOptions(validateStatus: (status) => true, headers: {"X-Naver-Client-Id": xNaverClientId, "X-Naver-Client-Secret": xNaverClientSecret}),
+    );
+  }
 
   Future<List<Item>> fetchLocationsByKeyword(String keyword) async {
     final response = await _client.get('https://openapi.naver.com/v1/search/local.json?query=$keyword&display=5');
-
+    log("fetchLocationsByKeyword ${response.statusCode}");
     if (response.statusCode == 200) {
       final items = response.data['items'];
       return (items as List).map((item) => Item.fromJson(item)).toList();
@@ -29,8 +33,8 @@ class LocationRepository {
       'https://api.vworld.kr/req/data?request=GetFeature&data=LT_C_ADEMD_INFO&key=$vworldKey&geomfilter=point($lng%20$lat)&geometry=false&size=100',
     );
 
+    log("fetchKeywordFromGeo ${response.statusCode}");
     if (response.statusCode == 200) {
-      log(response.data['response']['status']);
       switch (response.data['response']['status']) {
         case "OK":
           //읍면동
