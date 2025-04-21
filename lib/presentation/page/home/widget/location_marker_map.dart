@@ -43,11 +43,15 @@ class LocationMarkerMapState extends ConsumerState<LocationMarkerMap> {
         caption: NOverlayCaption(text: removeTag(location.title)),
       );
 
-      marker.setOnTapListener((NMarker tappedMarker) {
-        if (location.link.startsWith("https")) {
+      _mapController!.addOverlay(marker);
+
+      if (location.link.startsWith("https")) {
+        final onMarkerInfoWindow = NInfoWindow.onMarker(id: marker.info.id, text: "링크");
+        marker.openInfoWindow(onMarkerInfoWindow);
+        marker.setOnTapListener((NMarker tappedMarker) {
           Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(url: location.link)));
-        }
-      });
+        });
+      }
 
       return marker;
     }).toSet();
@@ -60,8 +64,7 @@ class LocationMarkerMapState extends ConsumerState<LocationMarkerMap> {
     _mapController!.clearOverlays();
 
     // 새로운 마커 추가
-    final newMarkers = _buildMarkers(locations);
-    _mapController!.addOverlayAll(newMarkers);
+    _buildMarkers(locations);
   }
 
   @override
