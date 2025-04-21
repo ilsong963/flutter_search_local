@@ -40,11 +40,21 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             IconButton(
               onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Center(child: CircularProgressIndicator());
+                  },
+                );
+
                 final position = await GeolocatorHelper.getPositon();
                 if (position != null) {
                   await ref.read(locationSearchViewModel.notifier).searchLocationsByGeo(position.latitude, position.longitude);
                   draggableController.animateTo(0.6, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                 }
+
+                if (context.mounted) Navigator.pop(context);
               },
               icon: Icon(Icons.gps_fixed),
             ),
