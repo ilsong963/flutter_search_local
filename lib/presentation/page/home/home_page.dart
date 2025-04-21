@@ -7,16 +7,20 @@ import 'package:flutter_search_local/presentation/page/home/home_page_view_model
 import 'package:flutter_search_local/presentation/page/home/widget/local_search_result_card.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/location_marker_map.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final searchLocalResultList = ref.watch(locationSearchViewModel);
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
 
-    // 1. Controller 선언
-    final draggableController = DraggableScrollableController();
-    late void Function(NLatLng latLng) moveMapCamera;
+class _HomePageState extends ConsumerState<HomePage> {
+  final draggableController = DraggableScrollableController();
+  void Function(NLatLng latLng)? moveMapCamera;
+
+  @override
+  Widget build(BuildContext context) {
+    final searchLocalResultList = ref.watch(locationSearchViewModel);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -27,10 +31,8 @@ class HomePage extends ConsumerWidget {
               child: TextField(
                 onSubmitted: (value) async {
                   await ref.read(locationSearchViewModel.notifier).searchLocationsByKeyword(value);
-
-                  // 3. 검색 후 드로어 펼치기
                   if (draggableController.size < 0.4) {
-                    draggableController.animateTo(2.0, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    draggableController.animateTo(0.6, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
                   }
                 },
                 decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
@@ -53,11 +55,13 @@ class HomePage extends ConsumerWidget {
         children: [
           LocationMarkerMap(
             onControllerInitialized: (controller) {
-              moveMapCamera = controller;
+              setState(() {
+                moveMapCamera = controller;
+              });
             },
           ),
           DraggableScrollableSheet(
-            controller: draggableController, // 2. 연결
+            controller: draggableController,
             initialChildSize: 0.05,
             minChildSize: 0.05,
             maxChildSize: 0.8,
@@ -91,7 +95,11 @@ class HomePage extends ConsumerWidget {
                           final result = searchLocalResultList![index];
                           return GestureDetector(
                             onTap: () {
-                              moveMapCamera(convertVWorldToNaverLatLng(result.mapx, result.mapy));
+                              final latLng = convertVWorldToNaverLatLng(result.mapx, result.mapy);
+                              if (moveMapCamera != null) {
+                                moveMapCamera!(latLng);
+                                draggableController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                              }
                             },
                             child: Padding(padding: EdgeInsets.all(5), child: LocalSearchResultCard(result: result)),
                           );
