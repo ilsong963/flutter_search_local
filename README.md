@@ -41,7 +41,7 @@ Flutter 기반 지역 검색 및 지도 표시 앱입니다.
 - 🧾 상세 카드 리스트 + 드래그 시트 UI
 
 
-###🔧 사용 기술
+##🔧 사용 기술
 - Flutter
 - flutter_riverpod – 상태 관리
 - flutter_naver_map – 네이버 지도 SDK
