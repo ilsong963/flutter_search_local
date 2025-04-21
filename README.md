@@ -7,14 +7,6 @@ Flutter 기반 지역 검색 및 지도 표시 앱입니다.
 
 ## 🚀 Getting Started
 
-### 1. 패키지 설치
-
-```bash
-flutter pub get
-2. 실행
-bash
-복사
-편집
 flutter run
 🗂 폴더 구조
 bash
