@@ -1,30 +1,4 @@
-class Welcome {
-  String lastBuildDate;
-  int total;
-  int start;
-  int display;
-  List<Item> items;
-
-  Welcome({required this.lastBuildDate, required this.total, required this.start, required this.display, required this.items});
-
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
-    lastBuildDate: json["lastBuildDate"],
-    total: json["total"],
-    start: json["start"],
-    display: json["display"],
-    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "lastBuildDate": lastBuildDate,
-    "total": total,
-    "start": start,
-    "display": display,
-    "items": List<dynamic>.from(items.map((x) => x.toJson())),
-  };
-}
-
-class Item {
+class Location {
   String title;
   String link;
   String category;
@@ -35,7 +9,7 @@ class Item {
   String mapx;
   String mapy;
 
-  Item({
+  Location({
     required this.title,
     required this.link,
     required this.category,
@@ -47,7 +21,7 @@ class Item {
     required this.mapy,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory Location.fromJson(Map<String, dynamic> json) => Location(
     title: json["title"],
     link: json["link"],
     category: json["category"],

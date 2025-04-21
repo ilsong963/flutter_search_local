@@ -1,16 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_search_local/core/util/convert_vworld_to_naver_lat_lng.dart';
 import 'package:flutter_search_local/core/util/remove_tag.dart';
 import 'package:flutter_search_local/data/model/location.dart';
+import 'package:flutter_search_local/presentation/page/detail/detail_page.dart';
 import 'package:flutter_search_local/presentation/page/home/home_page_view_model.dart';
 
 class LocationMarkerMap extends ConsumerStatefulWidget {
-  final sharedOptionState = StreamController<NaverMapViewOptions>.broadcast()..add(const NaverMapViewOptions());
+  final void Function(void Function(NLatLng latLng))? onControllerInitialized;
 
-  LocationMarkerMap({super.key});
+  const LocationMarkerMap({super.key, this.onControllerInitialized});
 
   @override
   LocationMarkerMapState createState() => LocationMarkerMapState();
@@ -19,21 +19,41 @@ class LocationMarkerMap extends ConsumerStatefulWidget {
 class LocationMarkerMapState extends ConsumerState<LocationMarkerMap> {
   NaverMapController? _mapController;
 
-  Set<NMarker> _buildMarkers(List<Item>? locations) {
+  void _moveCameraTo(NLatLng latLng) {
+    _mapController?.updateCamera(NCameraUpdate.withParams(target: latLng, zoom: 15));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onControllerInitialized?.call(_moveCameraTo);
+    });
+  }
+
+  Set<NMarker> _buildMarkers(List<Location>? locations) {
     if (locations == null || locations.isEmpty) {
       return <NMarker>{};
     }
-    // location의 좌표값 / 10000000
+
     return locations.map((location) {
-      return NMarker(
+      final marker = NMarker(
         id: 'marker_${removeTag(location.title)}',
-        position: NLatLng(double.parse(location.mapy) / 10000000, double.parse(location.mapx) / 10000000),
+        position: convertVWorldToNaverLatLng(location.mapx, location.mapy),
         caption: NOverlayCaption(text: removeTag(location.title)),
       );
+
+      marker.setOnTapListener((NMarker tappedMarker) {
+        if (location.link.startsWith("https")) {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(url: location.link)));
+        }
+      });
+
+      return marker;
     }).toSet();
   }
 
-  void _updateMarkers(List<Item>? locations) {
+  void _updateMarkers(List<Location>? locations) {
     if (_mapController == null) return;
 
     // 기존 마커 제거

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_search_local/core/helper/geolocator_helper.dart';
-import 'package:flutter_search_local/presentation/page/detail/detail_page.dart';
+import 'package:flutter_search_local/core/util/convert_vworld_to_naver_lat_lng.dart';
 import 'package:flutter_search_local/presentation/page/home/home_page_view_model.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/local_search_result_card.dart';
 import 'package:flutter_search_local/presentation/page/home/widget/location_marker_map.dart';
@@ -15,6 +16,7 @@ class HomePage extends ConsumerWidget {
 
     // 1. Controller 선언
     final draggableController = DraggableScrollableController();
+    late void Function(NLatLng latLng) moveMapCamera;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -49,7 +51,11 @@ class HomePage extends ConsumerWidget {
       ),
       body: Stack(
         children: [
-          LocationMarkerMap(),
+          LocationMarkerMap(
+            onControllerInitialized: (controller) {
+              moveMapCamera = controller;
+            },
+          ),
           DraggableScrollableSheet(
             controller: draggableController, // 2. 연결
             initialChildSize: 0.05,
@@ -85,9 +91,7 @@ class HomePage extends ConsumerWidget {
                           final result = searchLocalResultList![index];
                           return GestureDetector(
                             onTap: () {
-                              // if (result.link.startsWith("https")) {
-                              //   Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage(url: result.link)));
-                              // }
+                              moveMapCamera(convertVWorldToNaverLatLng(result.mapx, result.mapy));
                             },
                             child: Padding(padding: EdgeInsets.all(5), child: LocalSearchResultCard(result: result)),
                           );

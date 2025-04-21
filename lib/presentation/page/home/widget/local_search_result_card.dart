@@ -3,7 +3,7 @@ import 'package:flutter_search_local/data/model/location.dart';
 import 'package:flutter_search_local/core/util/remove_tag.dart';
 
 class LocalSearchResultCard extends StatelessWidget {
-  final Item result;
+  final Location result;
   const LocalSearchResultCard({super.key, required this.result});
 
   @override

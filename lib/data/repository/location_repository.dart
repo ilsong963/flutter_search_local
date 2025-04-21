@@ -17,12 +17,12 @@ class LocationRepository {
     );
   }
 
-  Future<List<Item>> fetchLocationsByKeyword(String keyword) async {
+  Future<List<Location>> fetchLocationsByKeyword(String keyword) async {
     final response = await _client.get('https://openapi.naver.com/v1/search/local.json?query=$keyword&display=5');
     log("fetchLocationsByKeyword ${response.statusCode}");
     if (response.statusCode == 200) {
       final items = response.data['items'];
-      return (items as List).map((item) => Item.fromJson(item)).toList();
+      return (items as List).map((item) => Location.fromJson(item)).toList();
     }
 
     return [];
@@ -49,7 +49,7 @@ class LocationRepository {
     return null;
   }
 
-  Future<List<Item>> fetchLocationsByGeo(double lat, double lng) async {
+  Future<List<Location>> fetchLocationsByGeo(double lat, double lng) async {
     final keyword = await fetchKeywordFromGeo(lat, lng);
     if (keyword != null) {
       return await fetchLocationsByKeyword(keyword);

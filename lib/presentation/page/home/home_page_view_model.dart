@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_search_local/data/model/location.dart';
 import 'package:flutter_search_local/data/repository/location_repository.dart';
 
-class LocationSearchViewModel extends AutoDisposeNotifier<List<Item>?> {
+class LocationSearchViewModel extends AutoDisposeNotifier<List<Location>?> {
   final locationRepository = LocationRepository();
 
   @override
-  List<Item>? build() {
+  List<Location>? build() {
     return [];
   }
 
@@ -21,6 +21,6 @@ class LocationSearchViewModel extends AutoDisposeNotifier<List<Item>?> {
   }
 }
 
-final locationSearchViewModel = NotifierProvider.autoDispose<LocationSearchViewModel, List<Item>?>(() {
+final locationSearchViewModel = NotifierProvider.autoDispose<LocationSearchViewModel, List<Location>?>(() {
   return LocationSearchViewModel();
 });
